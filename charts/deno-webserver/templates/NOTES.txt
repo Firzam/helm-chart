@@ -4,7 +4,7 @@
 #############################################
 
 In case you are on Windows, just run:
-`$ minikube services [deploy-name]`
+`$ minikube service deno-webserver`
 
 In case you are on Linux, follow those steps:
 
