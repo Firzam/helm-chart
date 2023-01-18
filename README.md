@@ -18,3 +18,18 @@ To install the  chart:
 To uninstall the chart:
 
     helm delete deno-webserver
+
+## Changelog
+
+deno-webserver:
+- 0.2.1
+  - Use release variable to create deploy
+  - Change deno-webserver image to `codebuds/micro-symfony-webserver:0.2.1`
+- 0.2.0
+  - Add GitHub action to create release
+  - Add GitPage
+  - Change MariaDB to StatefulSet
+- 0.1.0
+  - Create helm chart
+  - Create deno-webserver
+  - Create mariadb
