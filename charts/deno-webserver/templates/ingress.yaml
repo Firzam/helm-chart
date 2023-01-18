@@ -1,0 +1,16 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-deno-webserver
+spec:
+  rules:
+    - host: "deno.minikube"
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: deno-webserver
+                port:
+                  number: 80

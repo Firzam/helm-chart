@@ -1,0 +1,15 @@
+#############################################
+#       Services and pods are starting      #
+#               Be Patient!                 #
+#############################################
+
+In case you are on Windows, just run:
+`$ minikube services [deploy-name]`
+
+In case you are on Linux, follow those steps:
+
+- Run `$ minikube ip` to get the IP needed to connect to your ingress.
+- Add it to your `/etc/hosts` as `deno.minikube [minikube ip]`
+
+Finally access your application from here:
+        http://deno.minikube/

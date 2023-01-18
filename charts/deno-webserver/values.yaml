@@ -1,0 +1,59 @@
+webserver:
+  replicaCount: 3
+  image:
+    repository: codebuds/deno-webserver
+    pullPolicy: Always
+    tag: 1.3.1
+  volumeMounts:
+    mountPath: /srv/app/pvc
+    name: logs
+  volumes:
+    name: logs
+    nameClaim: logs
+
+pvwebserver:
+  name: deno-server
+  size: 3Gi
+  path: /data/deno-server
+  persistentVolumeReclaimPolicy: Retain
+
+pvcwebserver:
+  name: logs
+  size: 1Gi
+
+servicewebserver:
+  name: deno-webserver
+  port: 80
+  targetPort: 8080
+  type: NodePort
+
+mariadb:
+  auth:
+    user: dGVzdAo=
+    password: YXNlY3JldA==
+    database: bG9ncw==
+    rootPassword: YXNlY3JldA==
+  image:
+    repository: mariadb
+    pullPolicy: Always
+    tag: latest
+  volumeMounts:
+    mountPath: /var/lib/mysql
+    name: maria-db
+  volumes:
+    name: maria-db
+    nameClaim: maria-db
+
+pvmariadb:
+  name: mariadb
+  size: 10Gi
+  path: /data/maria-db
+  persistentVolumeReclaimPolicy: Retain
+
+pvcmariadb:
+  name: maria-db
+  size: 1Gi
+
+servicemariadb:
+  name: maria-db
+  port: 3306
