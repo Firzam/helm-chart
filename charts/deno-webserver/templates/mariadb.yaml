@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   annotations:
     deployment.kubernetes.io/revision: "3"
@@ -51,7 +51,7 @@ spec:
                   name: mariadb-secret
                   key: password
           ports:
-            - containerPort: 3306
+            - containerPort: {{ .Values.servicemariadb.port }}
               name: mysql
           volumeMounts:
             - name: {{ .Values.mariadb.volumeMounts.name }}
