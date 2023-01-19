@@ -1,16 +1,16 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: ingress-deno-webserver
+  name: "{{ .Release.Name }}-ingress-deno-webserver"
 spec:
   rules:
-    - host: "deno.minikube"
+    - host: "{{ .Release.Name }}.deno.minikube"
       http:
         paths:
           - pathType: Prefix
             path: "/"
             backend:
               service:
-                name: deno-webserver
+                name: "{{ .Release.Name }}-deno-webserver"
                 port:
                   number: 80

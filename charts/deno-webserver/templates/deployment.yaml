@@ -7,7 +7,7 @@ metadata:
     generation: 1
     labels:
         app: deno-webserver
-    name: deno-webserver
+    name: "{{ .Release.Name }}-deno-webserver"
     namespace: default
 spec:
     progressDeadlineSeconds: 600
@@ -15,7 +15,7 @@ spec:
     revisionHistoryLimit: 10
     selector:
         matchLabels:
-            app: deno-webserver
+            app: "{{ .Release.Name }}-deno-webserver"
     strategy:
         rollingUpdate:
             maxSurge: 25%
@@ -25,33 +25,54 @@ spec:
         metadata:
             creationTimestamp:
             labels:
-                app: deno-webserver
+                app: "{{ .Release.Name }}-deno-webserver"
         spec:
             containers:
-                -   image: {{ .Values.webserver.image.repository }}:{{ .Values.webserver.image.tag }}
-                    imagePullPolicy: {{ .Values.webserver.image.pullPolicy }}
-                    name: deno-webserver
+                -   image: "{{ .Values.webserver.image.repository }}:{{ .Values.webserver.image.tag }}"
+                    imagePullPolicy: "{{ .Values.webserver.image.pullPolicy }}"
+                    name: "{{ .Release.Name }}-deno-webserver"
                     resources: { }
+                    env:
+                      - name: MARIADB_ROOT_PASSWORD
+                        valueFrom:
+                          secretKeyRef:
+                            name: "{{ .Release.Name }}-maria-db"
+                            key: rootPassword
+                      - name: MARIADB_DATABASE
+                        valueFrom:
+                          secretKeyRef:
+                            name: "{{ .Release.Name }}-maria-db"
+                            key: database
+                      - name: MARIADB_USER
+                        valueFrom:
+                          secretKeyRef:
+                            name: "{{ .Release.Name }}-maria-db"
+                            key: user
+                      - name: MARIADB_PASSWORD
+                        valueFrom:
+                          secretKeyRef:
+                            name: "{{ .Release.Name }}-maria-db"
+                            key: password
                     terminationMessagePath: /dev/termination-log
                     terminationMessagePolicy: File
                     volumeMounts:
-                      - mountPath: {{ .Values.webserver.volumeMounts.mountPath }}
-                        name: {{ .Values.webserver.volumeMounts.name }}
+                      - mountPath: "{{ .Release.Name }}-{{ .Values.webserver.volumeMounts.mountPath }}"
+                        name: "{{ .Release.Name }}-{{ .Values.webserver.volumeMounts.name }}"
             dnsPolicy: ClusterFirst
             restartPolicy: Always
             schedulerName: default-scheduler
             securityContext: { }
             terminationGracePeriodSeconds: 30
             volumes:
-                - name: {{ .Values.webserver.volumes.name }}
+                - name: "{{ .Release.Name }}-{{ .Values.webserver.volumes.name }}"
                   persistentVolumeClaim:
-                      claimName: {{ .Values.webserver.volumes.nameClaim }}
+                      claimName: "{{ .Release.Name }}-{{ .Values.webserver.volumes.nameClaim }}"
 
 ---
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-    name: deno-server
+    name: "{{ .Release.Name }}-deno-server"
 spec:
     accessModes:
         - ReadWriteOnce
@@ -60,13 +81,13 @@ spec:
     capacity:
         storage: 3Gi
     hostPath:
-        path: /data/deno-server/
+        path: "/data/{{ .Release.Name }}-deno-server/"
 
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-    name: logs
+    name: "{{ .Release.Name }}-logs"
     namespace: default
 spec:
     accessModes:
@@ -79,7 +100,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Values.servicewebserver.name }}
+  name: "{{ .Release.Name }}-{{ .Values.servicewebserver.name }}"
   namespace: default
 spec:
   ports:
@@ -87,5 +108,5 @@ spec:
       protocol: TCP
       targetPort: {{ .Values.servicewebserver.targetPort }}
   selector:
-    app: {{ .Values.servicewebserver.name }}
+    app: {{ .Release.Name }}-{{ .Values.servicewebserver.name }}
   type: {{ .Values.servicewebserver.type }}

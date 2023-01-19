@@ -4,57 +4,52 @@ metadata:
   annotations:
     deployment.kubernetes.io/revision: "3"
   labels:
-    app: maria-db
-  name: maria-db
+    app: "{{ .Release.Name }}-maria-db"
+  name: "{{ .Release.Name }}-maria-db"
   namespace: default
 spec:
-  progressDeadlineSeconds: 600
+  serviceName: "{{ .Release.Name }}-maria-db"
   replicas: 1
   revisionHistoryLimit: 10
   selector:
     matchLabels:
-      app: maria-db
-  strategy:
-    rollingUpdate:
-      maxSurge: 25%
-      maxUnavailable: 25%
-    type: RollingUpdate
+      app: "{{ .Release.Name }}-maria-db"
   template:
     metadata:
       labels:
-        app: maria-db
+        app: "{{ .Release.Name }}-maria-db"
     spec:
       containers:
         - image: {{ .Values.mariadb.image.repository }}:{{ .Values.mariadb.image.tag }}
           imagePullPolicy: {{ .Values.mariadb.image.pullPolicy }}
-          name: maria-db
+          name: "{{ .Release.Name }}-maria-db"
           resources: {}
           env:
             - name: MARIADB_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: mariadb-secret
+                  name: "{{ .Release.Name }}-maria-db"
                   key: rootPassword
             - name: MARIADB_DATABASE
               valueFrom:
                 secretKeyRef:
-                  name: mariadb-secret
+                  name: "{{ .Release.Name }}-maria-db"
                   key: database
-            - name: MYSQL_USER
+            - name: MARIADB_USER
               valueFrom:
                 secretKeyRef:
-                  name: mariadb-secret
+                  name: "{{ .Release.Name }}-maria-db"
                   key: user
-            - name: MYSQL_PASSWORD
+            - name: MARIADB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: mariadb-secret
+                  name: "{{ .Release.Name }}-maria-db"
                   key: password
           ports:
             - containerPort: {{ .Values.servicemariadb.port }}
               name: mysql
           volumeMounts:
-            - name: {{ .Values.mariadb.volumeMounts.name }}
+            - name: {{ .Release.Name }}-{{ .Values.mariadb.volumeMounts.name }}
               mountPath: {{ .Values.mariadb.volumeMounts.mountPath}}
       dnsPolicy: ClusterFirst
       restartPolicy: Always
@@ -62,15 +57,15 @@ spec:
       securityContext: {}
       terminationGracePeriodSeconds: 30
       volumes:
-        - name: {{ .Values.mariadb.volumes.name }}
+        - name: {{ .Release.Name }}-{{ .Values.mariadb.volumes.name }}
           persistentVolumeClaim:
-            claimName: {{ .Values.mariadb.volumes.nameClaim }}
+            claimName: {{ .Release.Name }}-{{ .Values.mariadb.volumes.nameClaim }}
 
 ---
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: {{ .Values.pvmariadb.name }}
+  name: {{ .Release.Name }}-{{ .Values.pvmariadb.name }}
 spec:
   accessModes:
     - ReadWriteOnce
@@ -79,13 +74,13 @@ spec:
   capacity:
     storage: {{ .Values.pvmariadb.size }}
   hostPath:
-    path: {{ .Values.pvmariadb.path }}
+    path: /data/"{{ .Release.Name }}-maria-db"
 
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ .Values.pvcmariadb.name }}
+  name: {{ .Release.Name }}-{{ .Values.pvcmariadb.name }}
   namespace: default
 spec:
   accessModes:
@@ -98,9 +93,9 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Values.servicemariadb.name }}
+  name: {{ .Release.Name }}-{{ .Values.servicemariadb.name }}
 spec:
   ports:
     - port: {{ .Values.servicemariadb.port }}
   selector:
-    app: {{ .Values.servicemariadb.name }}
+    app: {{ .Release.Name }}-{{ .Values.servicemariadb.name }}
