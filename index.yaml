@@ -3,6 +3,16 @@ entries:
   deno-webserver:
   - apiVersion: v2
     appVersion: 1.3.1
+    created: "2023-01-20T11:24:28.23403926Z"
+    description: A Helm chart for Kubernetes
+    digest: e40424af30b50b6f0d0a3cd54144dbedb60d363da701fd4c39c6ee4c5afae6dd
+    name: deno-webserver
+    type: application
+    urls:
+    - https://github.com/Firzam/helm-chart/releases/download/deno-webserver-0.5.0/deno-webserver-0.5.0.tgz
+    version: 0.5.0
+  - apiVersion: v2
+    appVersion: 1.3.1
     created: "2023-01-20T10:22:08.930254028Z"
     description: A Helm chart for Kubernetes
     digest: 14e6f673b96371d68863ca30eb39f40ffb534d7bf5501aee1f8f06633c5dff9e
@@ -41,4 +51,4 @@ entries:
     urls:
     - https://github.com/Firzam/helm-chart/releases/download/deno-webserver-0.1.0/deno-webserver-0.1.0.tgz
     version: 0.1.0
-generated: "2023-01-20T10:22:08.930267328Z"
+generated: "2023-01-20T11:24:28.234121564Z"
