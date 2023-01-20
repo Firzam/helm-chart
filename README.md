@@ -22,6 +22,10 @@ To uninstall the chart:
 ## Changelog
 
 deno-webserver:
+- 0.4.0
+  - Fix maria db connection
+  - Add Readiness probe to maria db
+  - Add Liveness probe to webserver
 - 0.3.0
   - Use release variable to create deploy
   - Change deno-webserver image to `codebuds/deno-webserver:1.5.1`
