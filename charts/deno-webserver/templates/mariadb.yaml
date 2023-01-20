@@ -41,6 +41,14 @@ spec:
           volumeMounts:
             - name: {{ .Release.Name }}-{{ .Values.mariadb.volumeMounts.name }}
               mountPath: {{ .Values.mariadb.volumeMounts.mountPath}}
+          readinessProbe:
+            initialDelaySeconds: 20
+            periodSeconds: 60
+            exec:
+              command:
+                - "/bin/sh"
+                - "-c"
+                - "mysqladmin status -u root -p$MARIADB_ROOT_PASSWORD"
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler
