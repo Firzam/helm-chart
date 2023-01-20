@@ -58,6 +58,12 @@ spec:
                     volumeMounts:
                       - mountPath: "{{ .Release.Name }}-{{ .Values.webserver.volumeMounts.mountPath }}"
                         name: "{{ .Release.Name }}-{{ .Values.webserver.volumeMounts.name }}"
+                    livenessProbe:
+                      initialDelaySeconds: 30
+                      periodSeconds: 60
+                      httpGet:
+                        path: /probe?probeType=liveness
+                        port: {{ .Values.servicewebserver.targetPort }}
             dnsPolicy: ClusterFirst
             restartPolicy: Always
             schedulerName: default-scheduler
