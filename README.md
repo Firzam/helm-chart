@@ -22,6 +22,8 @@ To uninstall the chart:
 ## Changelog
 
 deno-webserver:
+- 0.5.1
+  - Update documentation and NOTES
 - 0.5.0
   - Upgrade deno version to 1.6.0
   - Add initContainer that check mariadb state before starting web server
