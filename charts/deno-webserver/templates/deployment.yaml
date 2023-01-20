@@ -33,26 +33,26 @@ spec:
                     name: "{{ .Release.Name }}-deno-webserver"
                     resources: { }
                     env:
-                      - name: MARIADB_ROOT_PASSWORD
-                        valueFrom:
-                          secretKeyRef:
-                            name: "{{ .Release.Name }}-maria-db"
-                            key: rootPassword
-                      - name: MARIADB_DATABASE
-                        valueFrom:
-                          secretKeyRef:
-                            name: "{{ .Release.Name }}-maria-db"
-                            key: database
-                      - name: MARIADB_USER
-                        valueFrom:
-                          secretKeyRef:
-                            name: "{{ .Release.Name }}-maria-db"
-                            key: user
                       - name: MARIADB_PASSWORD
                         valueFrom:
                           secretKeyRef:
-                            name: "{{ .Release.Name }}-maria-db"
+                            name: "{{ .Release.Name }}-mariadb-secret"
                             key: password
+                      - name: MARIADB_DATABASE
+                        valueFrom:
+                          secretKeyRef:
+                            name: "{{ .Release.Name }}-mariadb-secret"
+                            key: database
+                      - name: MARIADB_USERNAME
+                        valueFrom:
+                          secretKeyRef:
+                            name: "{{ .Release.Name }}-mariadb-secret"
+                            key: user
+                      - name: MARIADB_HOST
+                        valueFrom:
+                          secretKeyRef:
+                            name: "{{ .Release.Name }}-mariadb-secret"
+                            key: hostname
                     terminationMessagePath: /dev/termination-log
                     terminationMessagePolicy: File
                     volumeMounts:

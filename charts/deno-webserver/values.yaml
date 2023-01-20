@@ -29,10 +29,9 @@ servicewebserver:
 
 mariadb:
   auth:
-    user: dGVzdAo=
-    password: YXNlY3JldA==
-    database: bG9ncw==
-    rootPassword: YXNlY3JldA==
+    user: root
+    password: asecret
+    database: logs
   image:
     repository: mariadb
     pullPolicy: Always

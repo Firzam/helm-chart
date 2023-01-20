@@ -28,23 +28,13 @@ spec:
             - name: MARIADB_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: "{{ .Release.Name }}-maria-db"
-                  key: rootPassword
+                  name: "{{ .Release.Name }}-mariadb-secret"
+                  key: password
             - name: MARIADB_DATABASE
               valueFrom:
                 secretKeyRef:
-                  name: "{{ .Release.Name }}-maria-db"
+                  name: "{{ .Release.Name }}-mariadb-secret"
                   key: database
-            - name: MARIADB_USER
-              valueFrom:
-                secretKeyRef:
-                  name: "{{ .Release.Name }}-maria-db"
-                  key: user
-            - name: MARIADB_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: "{{ .Release.Name }}-maria-db"
-                  key: password
           ports:
             - containerPort: {{ .Values.servicemariadb.port }}
               name: mysql
@@ -93,9 +83,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Release.Name }}-{{ .Values.servicemariadb.name }}
+  name: {{ .Release.Name }}
 spec:
   ports:
     - port: {{ .Values.servicemariadb.port }}
+      targetPort: {{ .Values.servicemariadb.port }}
+      protocol: TCP
   selector:
     app: {{ .Release.Name }}-{{ .Values.servicemariadb.name }}
