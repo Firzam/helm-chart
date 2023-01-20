@@ -27,6 +27,17 @@ spec:
             labels:
                 app: "{{ .Release.Name }}-deno-webserver"
         spec:
+            initContainers:
+              - name: check-mariadb
+                image: busybox:1.31
+                env:
+                  - name: MARIADB_HOST
+                    value: "{{ .Release.Name }}"
+                command: [
+                  'sh',
+                  '-c',
+                  "echo -e \"check mariadb\"; while ! nc -z $MARIADB_HOST 3306; do sleep 10; printf \"-\"; done; echo -e \" >> bdd ok \";"
+                ]
             containers:
                 -   image: "{{ .Values.webserver.image.repository }}:{{ .Values.webserver.image.tag }}"
                     imagePullPolicy: "{{ .Values.webserver.image.pullPolicy }}"
