@@ -3,7 +3,7 @@ webserver:
   image:
     repository: codebuds/deno-webserver
     pullPolicy: Always
-    tag: 1.5.1
+    tag: 1.6.0
   volumeMounts:
     mountPath: /srv/app/pvc
     name: logs
