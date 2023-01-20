@@ -4,7 +4,7 @@
 #############################################
 
 In case you are on Windows, just run:
-`$ minikube service deno-webserver`
+`$ minikube service <release_name>-deno-webserver`
 
 In case you are on Linux, follow those steps:
 

@@ -1,5 +1,6 @@
+# Specify value for our deno-webserver
 webserver:
-  replicaCount: 3
+  replicaCount: 3 # Tell kubernetes how many pods of we want to run
   image:
     repository: codebuds/deno-webserver
     pullPolicy: Always
@@ -11,22 +12,26 @@ webserver:
     name: logs
     nameClaim: logs
 
+# Specify value for our deno-webserver's persistent volume
 pvwebserver:
   name: deno-server
   size: 3Gi
   path: /data/deno-server
   persistentVolumeReclaimPolicy: Retain
 
+# Specify value for our deno-webserver's persistent volume claim
 pvcwebserver:
   name: logs
   size: 1Gi
 
+# Specify value for our deno-webserver's service
 servicewebserver:
   name: deno-webserver
   port: 80
   targetPort: 8080
   type: NodePort
 
+# Specify vaue for our maria db
 mariadb:
   auth:
     user: root
@@ -43,15 +48,18 @@ mariadb:
     name: maria-db
     nameClaim: maria-db
 
+# Specify value for our maria db persistent volume
 pvmariadb:
   name: mariadb
   size: 10Gi
   persistentVolumeReclaimPolicy: Retain
 
+# Specify value for our maria db persistent volume claim
 pvcmariadb:
   name: maria-db
   size: 1Gi
 
+# Specify value for our maria db service
 servicemariadb:
   name: maria-db
   port: 3306
